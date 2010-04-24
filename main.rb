@@ -1,5 +1,5 @@
-require 'rubygems'
-require 'mplayer'
+require 'lib/mplayer'
+require 'lib/track_finder'
 
 unless ARGV.first
   puts "USAGE: ruby main.rb $minute"
@@ -33,7 +33,7 @@ speed_up_thread = Thread.new {
 }
 
 loop do
-  track = Foo.get_next_track
+  track = TrackFinder.get_next_track
   next unless File.file?(track)
 
   mplayer.play(track.gsub(' ', '\ '))
