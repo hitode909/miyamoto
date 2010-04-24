@@ -101,7 +101,7 @@ class MPlayer
   end
 
   def command(text)
-    puts "send: #{text}"
+    #puts "send: #{text}"
     @io.puts text
   end
 
