@@ -20,23 +20,23 @@ Thread.new {
   }
 }
 
+speed = 1.0
+
+speed_up_thread = Thread.new {
+  loop {
+    if Time.now > timer && !mplayer.pausing
+      speed += 0.1
+      mplayer.set_speed(speed)
+    end
+    sleep Time.now > timer ? 60 : 3.1
+  }
+}
 
 loop do
   track = Foo.get_next_track
   next unless File.file?(track)
 
   mplayer.play(track.gsub(' ', '\ '))
-  speed = 1.0
-
-  speed_up_thread = Thread.new {
-    loop {
-      if Time.now > timer && !mplayer.pausing
-        speed += 0.1
-        mplayer.set_speed(speed)
-      end
-      sleep Time.now > timer ? 60 : 3.1
-    }
-  }
 
   while mplayer.playing?
     if Time.now > timer && !is_past
@@ -49,6 +49,4 @@ loop do
     end
     sleep 1
   end
-  speed_up_thread.kill
-  speed_up_thread = nil
 end
