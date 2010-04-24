@@ -13,9 +13,8 @@ is_past = false
 track = nil
 
 Thread.new {
-  sleep 1
   loop {
-    STDOUT.write "playing #{track} #{(timer - Time.now).to_i}\r"
+    STDOUT.write "playing #{track} #{(timer - Time.now).to_i}      \r"
     STDOUT.flush
     sleep 1
   }
@@ -29,6 +28,16 @@ loop do
   mplayer.play(track.gsub(' ', '\ '))
   speed = 1.0
 
+  speed_up_thread = Thread.new {
+    loop {
+      if Time.now > timer && !mplayer.pausing
+        speed += 0.1
+        mplayer.set_speed(speed)
+      end
+      sleep Time.now > timer ? 60 : 3.1
+    }
+  }
+
   while mplayer.playing?
     if Time.now > timer && !is_past
       mplayer.pause
@@ -40,4 +49,6 @@ loop do
     end
     sleep 1
   end
+  speed_up_thread.kill
+  speed_up_thread = nil
 end

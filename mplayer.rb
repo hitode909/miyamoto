@@ -15,6 +15,7 @@ module Foo
 end
 
 class MPlayer
+  attr_reader :pausing
   def initialize
     @thread_to_stop = nil
     @playing = false
