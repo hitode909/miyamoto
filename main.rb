@@ -1,15 +1,31 @@
 require 'rubygems'
 require 'mplayer'
 
+unless ARGV.first
+  puts "USAGE: ruby main.rb $minute"
+  exit 1
+end
+
 mplayer = MPlayer.new
-timer = Time.now + (ARGV.first || 0.1).to_f * 60
+secs = (ARGV.first || 0.1).to_f * 60
+timer = Time.now + secs
 is_past = false
+track = nil
+
+Thread.new {
+  sleep 1
+  loop {
+    STDOUT.write "playing #{track} #{(timer - Time.now).to_i}\r"
+    STDOUT.flush
+    sleep 1
+  }
+}
+
 
 loop do
   track = Foo.get_next_track
   next unless File.file?(track)
 
-  puts "playing #{track}"
   mplayer.play(track.gsub(' ', '\ '))
   speed = 1.0
 
