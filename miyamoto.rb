@@ -1,6 +1,17 @@
 #!/usr/bin/env ruby
-require 'lib/mplayer'
-require 'lib/track_finder'
+# -*- coding: utf-8 -*-
+
+self_file =
+  if File.symlink?(__FILE__)
+    require 'pathname'
+    Pathname.new(__FILE__).realpath
+  else
+    __FILE__
+  end
+$:.unshift(File.dirname(self_file) + "/lib")
+
+require 'mplayer'
+require 'track_finder'
 
 unless ARGV.first
   puts "USAGE: ./miyamoto.rb $minute"
