@@ -28,7 +28,7 @@ speed_up_thread = Thread.new {
       speed += 0.1
       mplayer.set_speed(speed)
     end
-    sleep Time.now > timer ? 60 : 3.1
+    sleep Time.now > timer ? 30 : 3.1
   }
 }
 
