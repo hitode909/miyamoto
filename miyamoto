@@ -1,3 +1,4 @@
+#!/usr/bin/env ruby
 require 'lib/mplayer'
 require 'lib/track_finder'
 
