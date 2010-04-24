@@ -3,7 +3,7 @@ require 'lib/mplayer'
 require 'lib/track_finder'
 
 unless ARGV.first
-  puts "USAGE: ruby main.rb $minute"
+  puts "USAGE: ./miyamoto.rb $minute"
   exit 1
 end
 
