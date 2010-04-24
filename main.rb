@@ -11,7 +11,6 @@ loop do
 
   puts "playing #{track}"
   mplayer.play(track.gsub(' ', '\ '))
-  mplayer.seek_to_percent(80)
   speed = 1.0
 
   while mplayer.playing?
