@@ -42,7 +42,7 @@ loop do
   while mplayer.playing?
     if Time.now > timer && !is_past
       mplayer.pause
-      system "mplayer #{File.dirname(__FILE__)}/se.wav >& /dev/null"
+      system "mplayer #{File.dirname(__FILE__)}/lib/se.wav >& /dev/null"
       speed += 0.5
       mplayer.pause
       mplayer.set_speed(speed)
