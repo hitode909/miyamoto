@@ -1,21 +1,23 @@
 require 'rubygems'
-require 'uri'
-require 'ruby-mplayer/lib/mplayer'
+require 'mplayer'
 
-module Foo 
+mplayer = MPlayer.new
 
-  @library = open(File.expand_path('~/Music/iTunes/iTunes Music Library.xml')).read
+loop {
+  track = Foo.get_next_track
+  next unless File.file?(track)
 
-  def self.get_next_track
-    loop do
-      file = URI.unescape(@library.scan(%r|>file:\/\/localhost(.*)<|).flatten.choice)
-      return file if File.exist?(file)
-    end
+  puts "playing #{track}"
+  mplayer.play(track.gsub(' ', '\ '))
+  mplayer.seek_to_percent(80)
+
+  speed = 2
+  while mplayer.playing?
+    mplayer.pause
+    system 'say good morning!'
+    mplayer.pause
+    speed += 0.1
+    mplayer.set_speed(speed)
+    sleep 5
   end
-
-end
-
-mplayer = Mplayer.new
-p mplayer
-mplayer.play(Foo.get_next_track)
-
+}
