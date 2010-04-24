@@ -24,20 +24,17 @@ class MPlayer
       loop {
         chr = @io.read 1
         buffer << chr
-        if chr =~ /[\r\n]/
+        if chr =~ /[\r\n]/ && !@pausing
           #puts buffer
           if buffer =~ /A:/
             if stop_thread
-              puts "cansel timer"
               stop_thread.kill
               stop_thread = nil
             end
             cells = buffer.split(/ +/)
             next if cells.length < 8
-            #p cells[1].to_f / cells[4].to_f
-            if cells[1].to_f / cells[4].to_f > 0.995
+            if cells[1].to_f / cells[4].to_f > 0.9
               stop_thread = Thread.new {
-                puts "set timer"
                 sleep 1
                 @playing = false
               }
@@ -59,6 +56,7 @@ class MPlayer
 
   def play(path)
     @playing = true
+    @pausing = false
     self.command("loadfile #{path} 0")
   end
 
@@ -72,6 +70,7 @@ class MPlayer
 
   def pause
     @playing = !@playing
+    @pausing = !@pausing
     self.command("pause")
   end
 
