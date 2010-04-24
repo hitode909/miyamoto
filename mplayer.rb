@@ -110,9 +110,9 @@ loop {
 
   puts "playing #{track}"
   mplayer.play(track.gsub(' ', '\ '))
-  #mplayer.seek_to_percent(98)
+  mplayer.seek_to_percent(80)
 
-  speed = 1
+  speed = 2
   while mplayer.playing?
     mplayer.pause
     system 'say good morning!'
