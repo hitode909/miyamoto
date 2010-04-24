@@ -16,7 +16,9 @@ end
 
 class MPlayer
   def initialize
+    @thread_to_stop = nil
     @playing = false
+    @resume_later = false
     @io = IO.popen "mplayer -idle -slave 2>&1", 'r+'
     Thread.new{
       buffer = ''
@@ -25,24 +27,24 @@ class MPlayer
         chr = @io.read 1
         buffer << chr
         if chr =~ /[\r\n]/ && !@pausing
-          #puts buffer
           if buffer =~ /A:/
-            if stop_thread
-              stop_thread.kill
-              stop_thread = nil
-            end
             cells = buffer.split(/ +/)
             next if cells.length < 8
             if cells[1].to_f / cells[4].to_f > 0.9
-              stop_thread = Thread.new {
-                sleep 1
-                @playing = false
-              }
+              self.set_thread_to_stop
             end
           end
           buffer = ''
         end
       }
+    }
+  end
+
+  def set_thread_to_stop
+    @thread_to_stop.kill if @thread_to_stop
+    @thread_to_stop = Thread.new {
+      sleep 1
+      @playing = false
     }
   end
 
@@ -57,6 +59,8 @@ class MPlayer
   def play(path)
     @playing = true
     @pausing = false
+    @thread_to_stop = nil
+    @resume_later = false
     self.command("loadfile #{path} 0")
   end
 
@@ -69,6 +73,12 @@ class MPlayer
   end
 
   def pause
+    if @resume_later
+      self.set_thread_to_stop
+      @resume_later = false
+    else
+      @resume_later = !!@thread_to_stop
+    end
     @playing = !@playing
     @pausing = !@pausing
     self.command("pause")
