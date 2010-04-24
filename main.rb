@@ -22,5 +22,6 @@ loop do
       mplayer.set_speed(speed)
       is_past = true
     end
+    sleep 1
   end
 end
