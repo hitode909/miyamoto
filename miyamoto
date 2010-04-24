@@ -15,7 +15,7 @@ track = nil
 
 Thread.new {
   loop {
-    STDOUT.write "playing #{track} #{(timer - Time.now).to_i}      \r"
+    STDOUT.write "playing \"#{File.basename("#{track}")}\" #{(timer - Time.now).to_i}      \r"
     STDOUT.flush
     sleep 1
   }
